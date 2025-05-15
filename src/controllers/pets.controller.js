@@ -1,4 +1,5 @@
 // Este archivo contiene las funciones para manejar las operaciones relacionadas con las mascotas, incluyendo la recuperación de mascotas desde la base de datos.import PetDTO from "../dto/Pet.dto.js";
+import PetDTO from "../dto/Pet.dto.js";
 import { petsService } from "../services/index.js"
 import __dirname from "../utils/index.js";
 

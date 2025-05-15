@@ -1,31 +1,35 @@
-const User = require('../models/user.model');
+import { usersService } from "../services/index.js"
 
-// Función para obtener todos los usuarios
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener los usuarios', error });
-    }
-};
+const getAllUsers = async(req,res)=>{
+    const users = await usersService.getAll();
+    res.send({status:"success",payload:users})
+}
 
-// Función para obtener un usuario por ID
-const getUserById = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener el usuario', error });
-    }
-};
+const getUser = async(req,res)=> {
+    const userId = req.params.uid;
+    const user = await usersService.getUserById(userId);
+    if(!user) return res.status(404).send({status:"error",error:"User not found"})
+    res.send({status:"success",payload:user})
+}
 
-// Exportar las funciones
-module.exports = {
+const updateUser =async(req,res)=>{
+    const updateBody = req.body;
+    const userId = req.params.uid;
+    const user = await usersService.getUserById(userId);
+    if(!user) return res.status(404).send({status:"error", error:"User not found"})
+    const result = await usersService.update(userId,updateBody);
+    res.send({status:"success",message:"User updated"})
+}
+
+const deleteUser = async(req,res) =>{
+    const userId = req.params.uid;
+    const result = await usersService.getUserById(userId);
+    res.send({status:"success",message:"User deleted"})
+}
+
+export default {
+    deleteUser,
     getAllUsers,
-    getUserById,
-};
+    getUser,
+    updateUser
+}
