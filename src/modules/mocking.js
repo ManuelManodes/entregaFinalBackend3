@@ -1,24 +1,33 @@
-const bcrypt = require('bcrypt');
-const { faker } = require('@faker-js/faker');
+import bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
 
-const generateUsers = (numUsers) => {
+export const generateUsers = (numUsers) => {
     const users = [];
-    const roles = ['user', 'admin'];
-
     for (let i = 0; i < numUsers; i++) {
-        const role = roles[Math.floor(Math.random() * roles.length)];
         const user = {
             username: faker.internet.userName(),
             password: bcrypt.hashSync('coder123', 10),
-            role: role,
-            pets: []
+            role: faker.helpers.arrayElement(['user', 'admin']),
+            pets: [],
+            email: faker.internet.email(),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
         };
         users.push(user);
     }
-
     return users;
 };
 
-module.exports = {
-    generateUsers
+export const generatePets = (numPets) => {
+    const pets = [];
+    for (let i = 0; i < numPets; i++) {
+        const pet = {
+            name: faker.animal.cat(),
+            specie: faker.animal.type(),
+            birthDate: faker.date.past({ years: 5 }).toISOString().split("T")[0], // Actualizado
+            adopted: faker.datatype.boolean(),
+        };
+        pets.push(pet);
+    }
+    return pets;
 };

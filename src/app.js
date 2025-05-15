@@ -1,25 +1,30 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const mocksRouter = require('./routes/mocks.router');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import mocksRouter from './routes/mocks.router.js';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log('Database connected'))
-.catch(err => console.error('Database connection error:', err));
+// Registro de rutas
+app.use('/', mocksRouter);
 
-// Routes
-app.use('/api/mocks', mocksRouter);
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Conexión a la base de datos y arranque del servidor
+mongoose.set('strictQuery', true); // Configuración para evitar advertencias de Mongoose
+mongoose
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Conexión a la base de datos exitosa');
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error('Error al conectar a la base de datos:', err);
+    });

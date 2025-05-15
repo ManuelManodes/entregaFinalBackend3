@@ -1,24 +1,23 @@
-import petModel from "./models/Pet.js";
+import petModel from './Pet.js';
 
-export default class Pet {
+export default class PetsDAO {
+    getAll = () => {
+        return petModel.find();
+    };
 
-    get = (params) =>{
-        return petModel.find(params)
-    }
+    getById = (id) => {
+        return petModel.findById(id);
+    };
 
-    getBy = (params) =>{
-        return petModel.findOne(params);
-    }
+    create = (pet) => {
+        return petModel.create(pet);
+    };
 
-    save = (doc) =>{
-        return petModel.create(doc);
-    }
+    update = (id, pet) => {
+        return petModel.findByIdAndUpdate(id, { $set: pet }, { new: true });
+    };
 
-    update = (id,doc) =>{
-        return petModel.findByIdAndUpdate(id,{$set:doc})
-    }
-
-    delete = (id) =>{
+    delete = (id) => {
         return petModel.findByIdAndDelete(id);
-    }
+    };
 }

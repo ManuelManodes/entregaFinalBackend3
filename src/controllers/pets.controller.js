@@ -1,53 +1,69 @@
-// Este archivo contiene las funciones para manejar las operaciones relacionadas con las mascotas, incluyendo la recuperación de mascotas desde la base de datos.import PetDTO from "../dto/Pet.dto.js";
 import PetDTO from "../dto/Pet.dto.js";
-import { petsService } from "../services/index.js"
-import __dirname from "../utils/index.js";
+import { petsService } from "../services/index.js";
+import { __dirname } from "../utils/index.js";
+import { faker } from "@faker-js/faker";
 
-const getAllPets = async(req,res)=>{
+const getAllPets = async (req, res) => {
     const pets = await petsService.getAll();
-    res.send({status:"success",payload:pets})
-}
+    res.send({ status: "success", payload: pets });
+};
 
-const createPet = async(req,res)=> {
-    const {name,specie,birthDate} = req.body;
-    if(!name||!specie||!birthDate) return res.status(400).send({status:"error",error:"Incomplete values"})
-    const pet = PetDTO.getPetInputFrom({name,specie,birthDate});
+const createPet = async (req, res) => {
+    const { name, specie, birthDate } = req.body;
+    if (!name || !specie || !birthDate)
+        return res.status(400).send({ status: "error", error: "Incomplete values" });
+    const pet = PetDTO.getPetInputFrom({ name, specie, birthDate });
     const result = await petsService.create(pet);
-    res.send({status:"success",payload:result})
-}
+    res.send({ status: "success", payload: result });
+};
 
-const updatePet = async(req,res) =>{
+const updatePet = async (req, res) => {
     const petUpdateBody = req.body;
     const petId = req.params.pid;
-    const result = await petsService.update(petId,petUpdateBody);
-    res.send({status:"success",message:"pet updated"})
-}
+    const result = await petsService.update(petId, petUpdateBody);
+    res.send({ status: "success", message: "pet updated" });
+};
 
-const deletePet = async(req,res)=> {
+const deletePet = async (req, res) => {
     const petId = req.params.pid;
     const result = await petsService.delete(petId);
-    res.send({status:"success",message:"pet deleted"});
-}
+    res.send({ status: "success", message: "pet deleted" });
+};
 
-const createPetWithImage = async(req,res) =>{
+const createPetWithImage = async (req, res) => {
     const file = req.file;
-    const {name,specie,birthDate} = req.body;
-    if(!name||!specie||!birthDate) return res.status(400).send({status:"error",error:"Incomplete values"})
+    const { name, specie, birthDate } = req.body;
+    if (!name || !specie || !birthDate)
+        return res.status(400).send({ status: "error", error: "Incomplete values" });
     console.log(file);
     const pet = PetDTO.getPetInputFrom({
         name,
         specie,
         birthDate,
-        image:`${__dirname}/../public/img/${file.filename}`
+        image: `${__dirname}/../public/img/${file.filename}`,
     });
     console.log(pet);
     const result = await petsService.create(pet);
-    res.send({status:"success",payload:result})
-}
+    res.send({ status: "success", payload: result });
+};
+
+// Nuevo endpoint para generar mascotas ficticias
+const getMockingPets = async (req, res) => {
+    const count = parseInt(req.query.count) || 10; // Permitir al cliente especificar la cantidad de mascotas
+    const pets = Array.from({ length: count }, () => ({
+        name: faker.animal.cat(),
+        specie: faker.animal.type(),
+        birthDate: faker.date.past(5).toISOString().split("T")[0],
+        adopted: faker.datatype.boolean(),
+    }));
+    res.send({ status: "success", payload: pets });
+};
+
 export default {
     getAllPets,
     createPet,
     updatePet,
     deletePet,
-    createPetWithImage
-}
+    createPetWithImage,
+    getMockingPets, // Exportar el nuevo endpoint
+};

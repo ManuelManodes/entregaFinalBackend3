@@ -1,4 +1,4 @@
-import userModel from "./models/User.js";
+import userModel from "./User.js";
 
 
 export default class Users {
