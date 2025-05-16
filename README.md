@@ -12,11 +12,13 @@ Este es el proyecto final del curso Backend 3 en la comisión 70375. El objetivo
 - [Uso](#uso)
 - [Scripts Disponibles](#scripts-disponibles)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Documentación](#documentación)
+- [Testing](#testing)
 - [Licencia](#licencia)
 
 ## Descripción
 
-La API permite realizar operaciones CRUD sobre usuarios, mascotas y adopciones. También incluye funcionalidades adicionales como autenticación de usuarios, generación de datos ficticios para pruebas y carga de imágenes.
+La API permite realizar operaciones CRUD sobre usuarios, mascotas y adopciones. También incluye funcionalidades adicionales como autenticación de usuarios, generación de datos ficticios para pruebas, carga de imágenes y herramientas avanzadas como logging, documentación interactiva y testing.
 
 ## Características
 
@@ -25,6 +27,9 @@ La API permite realizar operaciones CRUD sobre usuarios, mascotas y adopciones. 
 - Generación de datos ficticios utilizando Faker.js.
 - Carga de imágenes con Multer.
 - Conexión a MongoDB para persistencia de datos.
+- **Logging avanzado** con Winston.
+- **Documentación interactiva** de la API con Swagger.
+- **Testing exhaustivo** con Mocha, Chai y SuperTest.
 
 ## Estructura del Proyecto
 
@@ -32,11 +37,13 @@ El proyecto está organizado de la siguiente manera:
 
 ```
 /src
-  /controllers
-  /models
-  /routes
-  /middlewares
-  /utils
+  /controllers    # Lógica de los endpoints
+  /models         # Modelos de datos para MongoDB
+  /routes         # Definición de rutas de la API
+  /middlewares    # Middleware personalizados
+  /services       # Lógica de negocio
+  /utils          # Utilidades generales
+/tests            # Pruebas unitarias e integradas
 ```
 
 ## Requisitos Previos
@@ -61,6 +68,23 @@ El proyecto está organizado de la siguiente manera:
 - `npm run dev`: Inicia el servidor en modo desarrollo.
 - `npm test`: Ejecuta las pruebas.
 
+## Documentación
+
+La API está documentada utilizando Swagger. Para acceder a la documentación interactiva:
+
+1. Inicia el servidor.
+2. Accede a `http://localhost:3000/api-docs` en tu navegador.
+
+## Testing
+
+El proyecto incluye pruebas unitarias e integradas para garantizar la calidad del código. Las pruebas están desarrolladas con Mocha, Chai y SuperTest.
+
+Para ejecutar las pruebas, utiliza el siguiente comando:
+
+```bash
+npx mocha test/mocks.router.test.js --timeout 5000
+```
+
 ## Tecnologías Utilizadas
 
 - Node.js
@@ -69,6 +93,9 @@ El proyecto está organizado de la siguiente manera:
 - JWT
 - Faker.js
 - Multer
+- Winston
+- Swagger
+- Mocha, Chai y SuperTest
 
 ## Licencia
 
